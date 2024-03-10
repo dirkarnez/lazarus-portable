@@ -19,9 +19,22 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: installer
-        shell: cmd
+        shell: bash
         run: |
-          curl https://zenlayer.dl.sourceforge.net/project/lazarus/Lazarus%20Windows%2064%20bits/Lazarus%20${{ env.version }}/lazarus-${{ env.version }}-fpc-3.2.2-win64.exe -L --output installer.exe
+          curl 'https://zenlayer.dl.sourceforge.net/project/lazarus/Lazarus%20Windows%2064%20bits/Lazarus%20${{ env.version }}/lazarus-${{ env.version }}-fpc-3.2.2-win64.exe' \
+          -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7' \
+          -H 'Accept-Language: en-US,en;q=0.9' \
+          -H 'Connection: keep-alive' \
+          -H 'Cookie: _gid=GA1.2.1568911838.1710099245; __gads=ID=c35a246e376a832d:T=1710099244:RT=1710099244:S=ALNI_Mb9tsiBOgItFnIoURRK2ev6vyu79A; __gpi=UID=00000d3182921b6e:T=1710099244:RT=1710099244:S=ALNI_Ma4CE3LoqT-kmrMoFqJeFdgugDCIA; __eoi=ID=aae63b102338ac01:T=1710099244:RT=1710099244:S=AA-Afja6OxpNROIOlq2TtvVPaEeV; _ga_1H226E4E4L=GS1.1.1710099244.1.1.1710099266.0.0.0; _ga=GA1.1.139116562.1710099245' \
+          -H 'Sec-Fetch-Dest: document' \
+          -H 'Sec-Fetch-Mode: navigate' \
+          -H 'Sec-Fetch-Site: none' \
+          -H 'Sec-Fetch-User: ?1' \
+          -H 'Upgrade-Insecure-Requests: 1' \
+          -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36' \
+          -H 'sec-ch-ua: "Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"' \
+          -H 'sec-ch-ua-mobile: ?0' \
+          -H 'sec-ch-ua-platform: "Windows"' -L --output installer.exe
           
       - shell: cmd
         run: |
