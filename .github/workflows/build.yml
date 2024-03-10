@@ -1,0 +1,46 @@
+name: portable-release-actions-workflow
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - '*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+permissions:
+    contents: write    
+    
+jobs:
+  build:
+    name: Create Release
+    runs-on: windows-latest
+    env:
+      targetZip: lazarus-portable-${{ github.ref_name }}.zip
+      version: 3.2
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: installer
+        shell: cmd
+        run: |
+          curl https://zenlayer.dl.sourceforge.net/project/lazarus/Lazarus%20Windows%2064%20bits/Lazarus%20${{ env.version }}/lazarus-${{ env.version }}-fpc-3.2.2-win64.exe -L --output installer.exe
+          
+      - shell: cmd
+        run: |
+          start /wait installer.exe /VERYSILENT /DIR=%CD%\installation /portable=1 /currentuser &&^
+          dir
+          
+      - shell: cmd
+        run: |
+          xcopy /H /Y /C "startlazarus.exe.Portable.cmd" "installation"
+        
+      - shell: cmd
+        run: |
+          cd /d "installation" &&^
+          7z.exe a "${{ github.workspace }}\${{ env.targetZip }}" &&^
+          dir
+          
+      - name: Release prebuilt
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "${{ env.targetZip }}"
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
